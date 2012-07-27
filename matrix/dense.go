@@ -100,9 +100,6 @@ func (A DenseMatrix) ColSlice(col int) []float64 {
 	return r
 }
 
-/*
-This is the new code that makes SumCol a method of DenseMatrix - ralph 7/19/2012
-*/
 // SumCol calculates the sum of the indicated column and returns a float64
 func (A DenseMatrix) SumCol(col int) float64 {
 	//numRows, _ := GetSize()
@@ -115,6 +112,23 @@ func (A DenseMatrix) SumCol(col int) float64 {
 	return sum
 }
 
+// SumCols takes the sum of each column in the matrix and returns a mX1 matrix of
+// the sums.
+func (m DenseMatrix) SumCols() *DenseMatrix {
+	numRows, numCols := m.GetSize()
+	sums := Zeros(1, numCols)
+
+	for j := 0; j < numCols; j++ {
+		i := 0
+		s := 0.0
+		for ; i < numRows; i++ {
+			s += m.Get(i, j)
+		}
+		sums.Set(0, j, s)
+	}
+	return sums
+}
+ 
 /*
 Returns an array of slices referencing the matrix data. Changes to
 the slices effect changes to the matrix.
