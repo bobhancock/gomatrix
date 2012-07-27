@@ -36,6 +36,45 @@ func (A *DenseMatrix) Pow(power float64) *DenseMatrix {
 	return raised
 }
 
+// FiltCol find values that matches min <= A <= max for a specific column.
+//
+// Return Value
+//
+// matches - a *matrix.DenseMatrix of the rows that match.
+func (mat *DenseMatrix) FiltCol(min, max float64, col int) (matches *DenseMatrix, err error) {
+	rows, cols := mat.GetSize()
+	buf := make([]float64, cols)
+	
+	if col < 0 || col > cols - 1 {
+		matches = Zeros(1,1)
+		return matches, errors.New(fmt.Sprintf("matutil: Expected col vaule in range 0 to %d.  Received %d\n", cols -1, col))
+	}
+
+	num_matches := 0
+	for i := 0; i < rows; i++ {
+		v := mat.Get(i, col)
+
+		if v >= min && v <= max {
+			if num_matches == 0 {
+				for j := 0; j < cols; j++ {
+					buf[j] = mat.Get(i, j)
+				}
+			} else {
+				for k := 0; k < cols; k++ {
+					buf = append(buf,  mat.Get(i, k))
+				}
+			}
+			num_matches++
+		}
+	}
+
+	if num_matches == 0 {
+		return matches, errors.New(fmt.Sprintf("matutil: No matches\n"))
+	}
+	matches = MakeDenseMatrix(buf, len(buf) / cols, cols)
+	return 
+ }
+
 // FiltColMap find values that matches min <= A <= max for a specific column.
 //
 // Return Value
@@ -160,7 +199,6 @@ func (mat DenseMatrix) SumRows() *DenseMatrix {
 	return sums
 }
 
- 
 /*
 Returns an array of slices referencing the matrix data. Changes to
 the slices effect changes to the matrix.
