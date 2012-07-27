@@ -163,19 +163,26 @@ func TestSumCols(t *testing.T) {
 	b := m.SumCols()
 	//9,3, 1, 4
 	if b.Get(0,0) != -9 || b.Get(0,1) != 3 || b.Get(0,2) != 1 || b.Get(0,3) != 4 {
-		t.Errorf("SumCols: Excpect a row vector of 9,3,1,4 but received %v.", b)
+		t.Errorf("SumCols: Excpect a row vector of [9, 3, 1 ,4] but received %v.", b)
 	}
 }
 
 func TestMeanCols(t *testing.T) {
 	m := MakeSumMatrix()
 	b := m.MeanCols()
-	//
 	if b.Get(0,0) != -2.25 || b.Get(0,1) != 0.75 || b.Get(0,2) != 0.25 || b.Get(0,3) != 1 {
-		t.Errorf("MeanCols: Excpect a row vector of -2.25, -0.75, -0.25, 1 but received %v.", b)
+		t.Errorf("MeanCols: Excpect a row vector of [-2.25, -0.75, -0.25], 1 but received %v.", b)
 	}
-	
 } 
+
+func TestSumRows(t *testing.T) {
+	m := MakeSumMatrix()
+	b := m.SumRows()
+	//4, -5, 9, -9
+	if b.Get(0,0) != 4 || b.Get(1,0) != -5 || b.Get(2,0) != 9 || b.Get(3,0) != -9 {
+		t.Errorf("MeanCols: Excpect a row vector of [-4, -5, 9, -9] but received %v.", b)
+	}
+}
 
 func TestProduct(t *testing.T) {
 	A := MakeDenseMatrix([]float64{6, -2, -4, 4,

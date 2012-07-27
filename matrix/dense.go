@@ -143,6 +143,23 @@ func (m DenseMatrix) MeanCols() *DenseMatrix {
 	return means
 }
 
+// SumRows takes the sum of each row in a matrix and returns a 1Xn matrix of
+// the sums.
+func (mat DenseMatrix) SumRows() *DenseMatrix {
+	numRows, numCols := mat.GetSize()
+	sums := Zeros(numRows, 1)
+
+	for i := 0; i < numRows; i++ {
+		j := 0
+		s := 0.0
+		for ; j < numCols; j++ {
+			s += mat.Get(i, j)
+		}
+		sums.Set(i, 0, s)
+	}
+	return sums
+}
+
  
 /*
 Returns an array of slices referencing the matrix data. Changes to
