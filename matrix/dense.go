@@ -128,6 +128,21 @@ func (m DenseMatrix) SumCols() *DenseMatrix {
 	}
 	return sums
 }
+
+// MeanCols calculates the mean of the columns and returns a 1Xn matrix
+func (m DenseMatrix) MeanCols() *DenseMatrix {
+	numRows, numCols := m.GetSize()
+	sums := m.SumCols()
+	means := Zeros(1, numCols)
+	b := float64(0)
+
+	for j := 0; j < numCols; j++ {
+		b = sums.Get(0, j) / float64(numRows)
+		means.Set(0, j, b)
+	}
+	return means
+}
+
  
 /*
 Returns an array of slices referencing the matrix data. Changes to

@@ -150,22 +150,32 @@ func TestColSliceValid(t *testing.T) {
 	}
 }
 
-func TestRalph1(t *testing.T) {
-	A := MakeDenseMatrix([]float64{6, -2, -4, 4,
-		3, -3, -6, 1,
-		-12, 8, 21, -8,
-		-6, 0, -10, 7,
-	},
-		4, 4)
-	if A.Nil() {
-		t.Fail()
-	}
-	b := A.SumCol(1)
-    //fmt.Printf("QQQ: testing A: %v b: %v\n", A, b);
+func TestSumCol(t *testing.T) {
+	m := MakeSumMatrix()
+	b := m.SumCol(1)
 	if b != 3 {
-        t.Errorf("Expected a sum of 3, but received %f", b)
+        t.Errorf("SumCol: Expected a sum of 3, but received %f", b)
 	}
 }
+
+func TestSumCols(t *testing.T) {
+	m := MakeSumMatrix()
+	b := m.SumCols()
+	//9,3, 1, 4
+	if b.Get(0,0) != -9 || b.Get(0,1) != 3 || b.Get(0,2) != 1 || b.Get(0,3) != 4 {
+		t.Errorf("SumCols: Excpect a row vector of 9,3,1,4 but received %v.", b)
+	}
+}
+
+func TestMeanCols(t *testing.T) {
+	m := MakeSumMatrix()
+	b := m.MeanCols()
+	//
+	if b.Get(0,0) != -2.25 || b.Get(0,1) != 0.75 || b.Get(0,2) != 0.25 || b.Get(0,3) != 1 {
+		t.Errorf("MeanCols: Excpect a row vector of -2.25, -0.75, -0.25, 1 but received %v.", b)
+	}
+	
+} 
 
 func TestProduct(t *testing.T) {
 	A := MakeDenseMatrix([]float64{6, -2, -4, 4,
@@ -894,3 +904,15 @@ func TestMultipleProduct(t *testing.T) {
 	}
 }
 */
+
+func MakeSumMatrix() *DenseMatrix {
+	m := MakeDenseMatrix([]float64{6, -2, -4, 4,
+	                               3, -3, -6, 1,
+		                          -12, 8, 21, -8,
+		                           -6, 0, -10, 7,
+	},
+		4, 4)
+	
+	return m
+}
+	
