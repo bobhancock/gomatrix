@@ -182,7 +182,7 @@ func (m DenseMatrix) MeanCols() *DenseMatrix {
 	return means
 }
 
-// SumRows takes the sum of each row in a matrix and returns a 1Xn matrix of
+// SumRows takes the sum of each row in a matrix and returns a nX1 matrix of
 // the sums.
 func (mat DenseMatrix) SumRows() *DenseMatrix {
 	numRows, numCols := mat.GetSize()
