@@ -949,10 +949,19 @@ func MakeSumMatrix() *DenseMatrix {
 	m := MakeDenseMatrix([]float64{6, -2, -4, 4,
 	                               3, -3, -6, 1,
 		                          -12, 8, 21, -8,
-		                           -6, 0, -10, 7,
-	},
+		                           -6, 0, -10, 7},
 		4, 4)
 	
 	return m
 }
 	
+func TestSetRowVector(t *testing.T) {
+	src := MakeDenseMatrix([]float64{0,1,2,3}, 1, 4)
+	tgt := MakeDenseMatrix([]float64{99, 100, 101, 102,
+	                                    250, 251, 252, 253},
+		2,4)
+	tgt.SetRowVector(src, 1)
+	if tgt.Get(1,0) != 0 || tgt.Get(1,1) != 1 || tgt.Get(1,2) != 2 || tgt.Get(1,3) != 3 {
+		t.Errorf("Expected [0, 1, 2, 3, 4] in row 1 but received %v", tgt)
+	}
+}

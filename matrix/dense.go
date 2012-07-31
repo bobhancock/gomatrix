@@ -303,6 +303,16 @@ func (A *DenseMatrix) GetRowVector(i int) *DenseMatrix {
 	return A.GetMatrix(i, 0, 1, A.cols)
 }
 
+// SetRowVector sets a row in the matrix to the values in row 0 of the 
+// source matrix.  If there are more columns in the source than in 
+// the target the target columns are filled up to number of columns.
+func (A *DenseMatrix) SetRowVector(src *DenseMatrix, row int) {
+	_, cols := A.GetSize()
+	for i := 0; i < cols; i ++ {
+		A.Set(row, i, src.Get(0,i))
+	}
+}
+
 /*
 Get a copy of this matrix with 0s above the diagonal.
 */
