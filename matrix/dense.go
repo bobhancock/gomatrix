@@ -293,7 +293,6 @@ func (A *DenseMatrix) GetRowVector(i int) *DenseMatrix {
 	return A.GetMatrix(i, 0, 1, A.cols)
 }
 
-<<<<<<< HEAD
 // SetRowVector sets a row in the matrix to the values in row 0 of the 
 // source matrix.  If there are more columns in the source than in 
 // the target the target columns are filled up to number of columns.
@@ -304,12 +303,7 @@ func (A *DenseMatrix) SetRowVector(src *DenseMatrix, row int) {
 	}
 }
 
-/*
-Get a copy of this matrix with 0s above the diagonal.
-*/
-=======
 // L gets a copy of this matrix with 0s above the diagonal.
->>>>>>> 60e18ca5b031e1d681764f3e18925c872c73e188
 func (A *DenseMatrix) L() *DenseMatrix {
 	B := A.Copy()
 	for i := 0; i < A.rows; i++ {
@@ -320,7 +314,7 @@ func (A *DenseMatrix) L() *DenseMatrix {
 	return B
 }
 
-// U get a copy of this matrix with 0s below the diagonal.
+// U gets a copy of this matrix with 0s below the diagonal.
 func (A *DenseMatrix) U() *DenseMatrix {
 	B := A.Copy()
 	for i := 0; i < A.rows; i++ {
