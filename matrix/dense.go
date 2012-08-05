@@ -306,7 +306,6 @@ func (A *DenseMatrix) SetRowVector(src *DenseMatrix, row int) {
 /*
 Get a copy of this matrix with 0s above the diagonal.
 */
-// L gets a copy of this matrix with 0s above the diagonal.
 func (A *DenseMatrix) L() *DenseMatrix {
 	B := A.Copy()
 	for i := 0; i < A.rows; i++ {
@@ -317,7 +316,7 @@ func (A *DenseMatrix) L() *DenseMatrix {
 	return B
 }
 
-// U get a copy of this matrix with 0s below the diagonal.
+// U gets a copy of this matrix with 0s below the diagonal.
 func (A *DenseMatrix) U() *DenseMatrix {
 	B := A.Copy()
 	for i := 0; i < A.rows; i++ {
