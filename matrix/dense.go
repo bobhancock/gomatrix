@@ -38,9 +38,7 @@ func (A *DenseMatrix) Pow(power float64) *DenseMatrix {
 
 // FiltCol find values that match min <= A <= max for a specific column.
 //
-// Return Value
-//
-// matches - a *matrix.DenseMatrix of the rows that match.
+// Returns the rows that match.
 func (A *DenseMatrix) FiltCol(min, max float64, col int) (*DenseMatrix, error) {
 	rows, cols := A.GetSize()
 	buf := make([]float64, cols)
