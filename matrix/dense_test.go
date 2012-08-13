@@ -116,9 +116,11 @@ func TestFiltColMapValid(t *testing.T) {
 }
 
 func TestFiltCol(t *testing.T) {
-	mat := MakeDenseMatrix([]float64{2, 1, 4, 2, 6, 3, 8, 4, 10, 5, 1, 1}, 5, 2)
+	mat := MakeDenseMatrix([]float64{2, 1, 4, 2, 6, 3, 8, 4, 10, 5}, 5, 2)
+    //fmt.Printf("QQQ: ORIGINAL mat:\n %v\n", mat);
 	// mat, max, min, column
 	matches, err := mat.FiltCol(2.0, 4.0, 1)
+    //fmt.Printf("QQQ: RESULT OF TEST matches:\n %v\n", matches);
 	if err != nil {
 		t.Errorf("FiltCol returned error: %v", err)
 		return
@@ -143,10 +145,71 @@ func TestFiltCol(t *testing.T) {
 		t.Errorf("FiltCol: expected row 1 col 1 to be 3, but got %f",m2)
 	}
 	matches, err = mat.FiltCol(100.0, 200.00, 1)
+    //fmt.Printf("QQQ: testing mat: %v err: %v\n", mat, err);
 	if err == nil {
 		t.Errorf("FiltCol did not return err on no match condition.")
 	}
 }
+
+func TestFiltCol2(t *testing.T) {
+	mat := MakeDenseMatrix([]float64{2, 1, 4, 2, 6, 3, 8, 4, 10, 5, 1,1,1,1,1}, 5, 3)
+    //fmt.Printf("QQQ: ORIGINAL mat:\n %v\n", mat);
+	// mat, max, min, column
+	matches, err := mat.FiltCol(2.0, 4.0, 1)
+    //fmt.Printf("QQQ: RESULT OF TEST matches:\n %v\n", matches);
+	if err != nil {
+		t.Errorf("FiltCol returned error: %v", err)
+		return
+	}
+	r, _ := matches.GetSize()
+	if r != 1 {
+		t.Errorf("FiltCol: expected 1 row and got %d", r)
+	}
+
+	m0 := matches.Get(0,1)
+	if m0 != 4 {
+		t.Errorf("FiltCol: expected row 0 col 1 to be 4, but got %f",m0)
+	}
+
+	matches, err = mat.FiltCol(100.0, 200.00, 1)
+    //fmt.Printf("QQQ: testing mat: %v err: %v\n", mat, err);
+	if err == nil {
+		t.Errorf("FiltCol did not return err on no match condition.")
+	}
+}
+
+func TestFiltCol3(t *testing.T) {
+	mat := MakeDenseMatrix([]float64{2, 1, 4, 2, 6, 3, 8, 4, 10, 5, 1,1,1,1,1,1,2,3}, 6, 3)
+    //fmt.Printf("QQQ: ORIGINAL mat:\n %v\n", mat);
+	// mat, max, min, column
+	matches, err := mat.FiltCol(2.0, 4.0, 1)
+    //fmt.Printf("QQQ: RESULT OF TEST matches:\n %v\n", matches);
+	if err != nil {
+		t.Errorf("FiltCol returned error: %v", err)
+		return
+	}
+	r, _ := matches.GetSize()
+	if r != 2 {
+		t.Errorf("FiltCol: expected 2 rows and got %d", r)
+	}
+
+	m0 := matches.Get(0,1)
+	if m0 != 4 {
+		t.Errorf("FiltCol: expected row 0 col 1 to be 4, but got %f",m0)
+	}
+
+	m1 := matches.Get(1,1)
+	if m1 != 2 {
+		t.Errorf("FiltCol: expected row 0 col 1 to be 2, but got %f",m0)
+	}
+
+	matches, err = mat.FiltCol(100.0, 200.00, 1)
+    //fmt.Printf("QQQ: testing mat: %v err: %v\n", mat, err);
+	if err == nil {
+		t.Errorf("FiltCol did not return err on no match condition.")
+	}
+}
+
 
 func TestAppendColInvalid(t *testing.T) {
 	rows := 3
@@ -154,6 +217,7 @@ func TestAppendColInvalid(t *testing.T) {
 	mat := MakeDenseMatrix([]float64{1, 2, 3, 4, 5, 6}, rows, columns)
 	col := []float64{1.1, 2.2, 3.3, 4.4}
 	mat, err := mat.AppendCol(col)
+    //fmt.Printf("QQQ: testing mat: %v err: %v\n", mat, err);
 	if err == nil {
 		t.Errorf("AppendCol err=%v", err)
 	}
