@@ -57,17 +57,24 @@ func (A *DenseMatrix) FiltCol(min, max float64, col int) (*DenseMatrix, error) {
 				for j := 0; j < cols; j++ {
 					buf[j] = A.Get(i, j)
 				}
+                //fmt.Printf("QQQ: FIRST MATCH copy row:\n %v\n", buf);
 			} else {
 				for k := 0; k < cols; k++ {
 					buf = append(buf,  A.Get(i, k))
 				}
+                //fmt.Printf("QQQ: SUBSEQUENT MATCH append row:\n %v\n", buf);
 			}
 			num_matches++
 		}
 	}
 
 	matches := MakeDenseMatrix(buf, len(buf) / cols, cols)
-	return matches, nil
+	var err error = nil
+    if num_matches == 0 {
+        err = errors.New("matutil: no match")
+    }
+	//return matches, nil
+	return matches, err
  }
 
 // FiltColMap find values that matches min <= A <= max for a specific column.
