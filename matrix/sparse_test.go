@@ -10,6 +10,36 @@ import (
 	"testing"
 )
 
+func TestMulStrassenOnly(t *testing.T) {
+    // force out of memory
+	//n := 2000
+	n := 8000
+	//n := 2 
+	//n := 3
+	//n := 4
+	//n := 200
+    //fmt.Printf("init1\n")
+	A := ZerosSparse(n, n)
+	for i := 0; i < 36; i++ {
+		x := rand.Intn(6)
+		y := rand.Intn(6)
+		A.Set(y, x, 1)
+	}
+    //fmt.Printf("init2\n")
+	B := ZerosSparse(n, n)
+	for i := 0; i < 36; i++ {
+		x := rand.Intn(6)
+		y := rand.Intn(6)
+		B.Set(y, x, 1)
+	}
+    fmt.Printf("A: %v B: %v\n",A.cols,B.cols)
+    //fmt.Printf("A: %v B: %v\n",A,B)
+	D := MulStrassen(A, B)
+    fmt.Printf("StrassenOnly: completed. D.width: %v\n",D.cols);
+    //fmt.Printf("StrassenOnly: completed. D: %v\n",D);
+
+}
+
 func TestAdd_Sparse(t *testing.T) {
 	A := NormalsSparse(3, 3, 9)
 	B := NormalsSparse(3, 3, 9)

@@ -22,6 +22,12 @@ func (A *SparseMatrix) PlusSparse(B *SparseMatrix) (*SparseMatrix, error) {
 	return C, err
 }
 
+func (A *SparseMatrix) PlusSparseQuiet(B *SparseMatrix) (*SparseMatrix) {
+	C := A.Copy()
+	C.AddSparse(B)
+	return C
+}
+
 /*
 The difference between this matrix and another.
 */
@@ -38,6 +44,12 @@ func (A *SparseMatrix) MinusSparse(B *SparseMatrix) (*SparseMatrix, error) {
 	C := A.Copy()
 	err := C.SubtractSparse(B)
 	return C, err
+}
+
+func (A *SparseMatrix) MinusSparseQuiet(B *SparseMatrix) (*SparseMatrix) {
+	C := A.Copy()
+	C.SubtractSparse(B)
+	return C
 }
 
 /*
