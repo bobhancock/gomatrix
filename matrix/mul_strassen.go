@@ -4,7 +4,7 @@
 
 package matrix
 
-//import "fmt"
+import "fmt"
 
 // MulStrassen returns A * B.
 //
@@ -79,13 +79,13 @@ func (C *SparseMatrix) MulStrassen(A, B *SparseMatrix) *SparseMatrix {
     //fmt.Printf(">>>>>ZZZ: Strassen: Z1: \n%v\n", Z1)
 
 	M1 := MulStrassen(Z, Z1)
-    //fmt.Printf("AFTER>>>>>000: Strassen: M1: \n%v\n", M1)
+    fmt.Printf("AFTER>>>>>000: Strassen: M1: \n%v\n", M1)
     //fmt.Printf("SHOULD NOT CHANGE AFTER>>>>>000: Strassen: A11: \n%v\n", A11);
     //fmt.Printf("SHOULD NOT CHANGE AFTER>>>>>000: Strassen: B11: \n%v\n", B11);
 	M2 := MulStrassen(A21.PlusSparseQuiet(A22), B11)
-    //fmt.Printf("AFTER>>>>>000: Strassen: M2: \n%v\n", M2)
+    fmt.Printf("AFTER>>>>>000: Strassen: M2: \n%v\n", M2)
 	M3 := MulStrassen(A11, B12.MinusSparseQuiet(B22))
-    //fmt.Printf("AFTER>>>>>000: Strassen: M3: \n%v\n", M3)
+    fmt.Printf("AFTER>>>>>000: Strassen: M3: \n%v\n", M3)
 
     //fmt.Printf("DEBUG1>>>>>000: Strassen: B21: \n%v\n", B21)
     //fmt.Printf("DEBUG1>>>>>000: Strassen: B21: \n%v\n", B21.elements)
@@ -95,13 +95,13 @@ func (C *SparseMatrix) MulStrassen(A, B *SparseMatrix) *SparseMatrix {
 	Z2 := B21.MinusSparseQuiet(B11)
     //fmt.Printf("DEBUG1>>>>>000: Strassen: Z2: \n%v\n", Z2)
 	M4 := MulStrassen(A22, Z2)
-    //fmt.Printf("AFTER>>>>>000: Strassen: M4: \n%v\n", M4)
+    fmt.Printf("AFTER>>>>>000: Strassen: M4: \n%v\n", M4)
 	M5 := MulStrassen(A11.PlusSparseQuiet(A12), B22)
-    //fmt.Printf("AFTER>>>>>000: Strassen: M5: \n%v\n", M5)
+    fmt.Printf("AFTER>>>>>000: Strassen: M5: \n%v\n", M5)
 	M6 := MulStrassen(A21.MinusSparseQuiet(A11), B11.PlusSparseQuiet(B12))
-    //fmt.Printf("AFTER>>>>>000: Strassen: M6: \n%v\n", M6)
+    fmt.Printf("AFTER>>>>>000: Strassen: M6: \n%v\n", M6)
 	M7 := MulStrassen(A12.MinusSparseQuiet(A22), B21.PlusSparseQuiet(B22))
-    //fmt.Printf("AFTER>>>>>000: Strassen: M7: \n%v\n", M7)
+    fmt.Printf("AFTER>>>>>000: Strassen: M7: \n%v\n", M7)
 
 
 	C11.AddSparse(M7)

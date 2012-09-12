@@ -59,7 +59,7 @@ func TestAddSparse(t *testing.T) {
 	A.AddSparse(B)
 }
 func TestElementMult_Sparse2(t *testing.T) {
-    n := 4
+    n := 8
 	A := Zeros(n, n).SparseMatrix()
 	for i := 0; i < n; i++ {
         A.Set(i,i,2)
@@ -71,6 +71,7 @@ func TestElementMult_Sparse2(t *testing.T) {
 	C1, _ := A.ElementMult(B)
 	C2, _ := A.ElementMultSparse(B)
 	D, _ := A.DenseMatrix().ElementMult(B)
+    //fmt.Printf("simple: %v\n", C2)
 	if !Equals(D, C1) {
 		t.Fail()
 	}
@@ -144,6 +145,29 @@ func TestMulStrassenOnly(t *testing.T) {
 	}
 
 	D := MulStrassen(A, B)
+	if !Equals(D, E) {
+		t.Fail()
+	}
+}
+
+func TestMulStrassenBigger(t *testing.T) {
+	n := 4
+	A := ZerosSparse(n, n)
+	B := ZerosSparse(n, n)
+	for i := 0; i < n; i++ {
+		A.Set(i, i, 2)
+		B.Set(i, i, 2)
+	}
+
+	E := ZerosSparse(n, n)
+	for i := 0; i < n; i++ {
+		E.Set(i, i, 4)
+	}
+
+    fmt.Printf("strassen bigger: A: %v\n", A)
+    fmt.Printf("strassen bigger: B: %v\n", B)
+	D := MulStrassen(A, B)
+    fmt.Printf("strassen bigger: %v\n", D)
 	if !Equals(D, E) {
 		t.Fail()
 	}
