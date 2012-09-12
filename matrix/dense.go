@@ -440,13 +440,16 @@ func (A *DenseMatrix) DenseMatrix() *DenseMatrix {
 	return A.Copy()
 }
 
-func Zeros(rows, cols int) *DenseMatrix {
+/*func Zeros(rows, cols int) *DenseMatrix {
 	A := new(DenseMatrix)
 	A.elements = make([]float64, rows*cols)
 	A.rows = rows
 	A.cols = cols
 	A.step = cols
 	return A
+}*/
+func Zeros(rows, cols int) *DenseMatrix {
+	return &DenseMatrix{matrix{rows, cols}, make([]float64, rows*cols), cols}
 }
 
 func Ones(rows, cols int) *DenseMatrix {
