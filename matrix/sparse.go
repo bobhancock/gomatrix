@@ -130,8 +130,16 @@ func (A *SparseMatrix) GetMatrix(i, j, rows, cols int) (subMatrix *SparseMatrix)
 	subMatrix.offset = (i+A.offset/A.step)*A.step + (j + A.offset%A.step)
 	subMatrix.step = A.step
 	subMatrix.elements = A.elements
-
-	return
+	for index, _ := range subMatrix.elements {
+		ii, jj := subMatrix.GetRowColIndex(index)
+        //if (ii<i || ii>i+rows || jj<j || jj>j+cols){
+        //if ((ii<0 || ii>rows) && (jj<0 || jj>cols)){
+        if (ii<0 || ii>=rows || jj<0 || jj>=cols){
+            delete(subMatrix.elements, index)
+        }
+    }
+	//return subMatrix
+	return 
 }
 
 /*
