@@ -36,6 +36,21 @@ func (A *DenseMatrix) Pow(power float64) *DenseMatrix {
 	return raised
 }
 
+// Squares every element of the matrix.  Returns a new
+// matrix.
+func (A *DenseMatrix) Sqr(power float64) *DenseMatrix {
+	numRows, numCols := A.GetSize()
+	squared := Zeros(numRows, numCols)
+
+	for i := 0; i < numRows; i++ {
+		for j := 0; j < numCols; j++ {
+			x := A.Get(i, j)
+			squared.Set(i, j, x*x)
+		}
+	}
+	return squared
+}
+
 // FiltCol find values that match min <= A <= max for a specific column.
 //
 // Returns the rows that match.
