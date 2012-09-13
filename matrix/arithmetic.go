@@ -6,7 +6,6 @@ package matrix
 
 import (
 	"math"
-	"fmt"
 )
 
 /*
