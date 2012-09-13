@@ -38,7 +38,7 @@ func (A *DenseMatrix) Pow(power float64) *DenseMatrix {
 
 // Squares every element of the matrix.  Returns a new
 // matrix.
-func (A *DenseMatrix) Sqr(power float64) *DenseMatrix {
+func (A *DenseMatrix) Sqr() *DenseMatrix {
 	numRows, numCols := A.GetSize()
 	squared := Zeros(numRows, numCols)
 
@@ -157,7 +157,7 @@ func (A DenseMatrix) ColSlice(col int) []float64 {
 
 // SumCol calculates the sum of the indicated column and returns a float64
 func (A DenseMatrix) SumCol(col int) float64 {
-	//numRows, _ := GetSize()
+	//numRows _ := GetSize()
 	numRows := A.rows
 	sum := float64(0)
 
@@ -440,17 +440,18 @@ func (A *DenseMatrix) DenseMatrix() *DenseMatrix {
 	return A.Copy()
 }
 
-/*func Zeros(rows, cols int) *DenseMatrix {
+func Zeros(rows, cols int) *DenseMatrix {
 	A := new(DenseMatrix)
+//	A.elements = make([]float64, rows*cols)
 	A.elements = make([]float64, rows*cols)
 	A.rows = rows
 	A.cols = cols
 	A.step = cols
 	return A
-}*/
-func Zeros(rows, cols int) *DenseMatrix {
-	return &DenseMatrix{matrix{rows, cols}, make([]float64, rows*cols), cols}
 }
+/*func Zeros(rows, cols int) *DenseMatrix {
+	return &DenseMatrix{matrix{rows, cols}, make([]float64, rows*cols), cols}
+}*/
 
 func Ones(rows, cols int) *DenseMatrix {
 	A := new(DenseMatrix)
