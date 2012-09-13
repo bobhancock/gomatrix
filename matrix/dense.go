@@ -38,7 +38,7 @@ func (A *DenseMatrix) Pow(power float64) *DenseMatrix {
 
 // Squares every element of the matrix.  Returns a new
 // matrix.
-func (A *DenseMatrix) Sqr() *DenseMatrix {
+func (A DenseMatrix) Sqr() *DenseMatrix {
 	numRows, numCols := A.GetSize()
 	squared := Zeros(numRows, numCols)
 
@@ -49,6 +49,19 @@ func (A *DenseMatrix) Sqr() *DenseMatrix {
 		}
 	}
 	return squared
+}
+
+// Sqrm squares every value in the matrix. In modifies the matix in place.
+func (A *DenseMatrix) Sqrm() {
+	numRows, numCols := A.GetSize()
+//	squared := Zeros(numRows, numCols)
+
+	for i := 0; i < numRows; i++ {
+		for j := 0; j < numCols; j++ {
+			x := A.Get(i, j)
+			A.Set(i, j, x*x)
+		}
+	}
 }
 
 // FiltCol find values that match min <= A <= max for a specific column.
@@ -198,7 +211,7 @@ func (m DenseMatrix) MeanCols() *DenseMatrix {
 	return means
 }
 
-// SumRows takes the sum of each row in a matrix and returns a nX1 matrix of
+// SumRows calculates the sum of each row in a matrix and returns a nX1 matrix of
 // the sums.
 func (A DenseMatrix) SumRows() *DenseMatrix {
 	numRows, numCols := A.GetSize()
@@ -213,6 +226,23 @@ func (A DenseMatrix) SumRows() *DenseMatrix {
 		sums.Set(i, 0, s)
 	}
 	return sums
+}
+
+// SumRowsM calculates the sum of each row in a matrix and modifes the first 
+// column of the row so that it contains the sum.  This is for performance
+// to avoid allocations made by Zeros()
+func (A *DenseMatrix) SumRowsM() {
+	numRows, numCols := A.GetSize()
+	//sums := Zeros(numRows, 1)
+
+	for i := 0; i < numRows; i++ {
+		j := 0
+		s := 0.0
+		for ; j < numCols; j++ {
+			s += A.Get(i, j)
+		}
+		A.Set(i, 0, s)
+	}
 }
 
 // Arrays returns an array of slices referencing the matrix data. Changes to
@@ -442,16 +472,12 @@ func (A *DenseMatrix) DenseMatrix() *DenseMatrix {
 
 func Zeros(rows, cols int) *DenseMatrix {
 	A := new(DenseMatrix)
-//	A.elements = make([]float64, rows*cols)
 	A.elements = make([]float64, rows*cols)
 	A.rows = rows
 	A.cols = cols
 	A.step = cols
 	return A
 }
-/*func Zeros(rows, cols int) *DenseMatrix {
-	return &DenseMatrix{matrix{rows, cols}, make([]float64, rows*cols), cols}
-}*/
 
 func Ones(rows, cols int) *DenseMatrix {
 	A := new(DenseMatrix)

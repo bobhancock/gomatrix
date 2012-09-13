@@ -4,7 +4,10 @@
 
 package matrix
 
-import "math"
+import (
+	"math"
+	"fmt"
+)
 
 /*
 Finds the sum of two matrices.
@@ -24,9 +27,7 @@ func Sum(A MatrixRO, Bs ...MatrixRO) (C *DenseMatrix) {
 	return
 }
 
-/*
-Finds the difference between two matrices.
-*/
+// Finds the difference between two matrices.
 func Difference(A, B MatrixRO) (C *DenseMatrix) {
 	C = MakeDenseCopy(A)
 	err := C.Subtract(MakeDenseCopy(B))
