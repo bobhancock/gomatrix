@@ -68,15 +68,17 @@ func (C *SparseMatrix) MulStrassen(A, B *SparseMatrix) *SparseMatrix {
     //fmt.Printf(">>>>>111: Strassen: C21: \n%v\n", C21);
     //fmt.Printf(">>>>>111: Strassen: C22: \n%v\n", C22);
 
-    //fmt.Printf(">>>>>XXX: Strassen: A11: \n%v\n", A11);
-    //fmt.Printf(">>>>>XXX: Strassen: A22: \n%v\n", A22);
+    fmt.Printf(">>>>>XXX: Strassen: A11: \n%v\n", A11);
+    fmt.Printf(">>>>>XXX: Strassen: A11: \n%v\n", A11.elements);
+    fmt.Printf(">>>>>XXX: Strassen: A22: \n%v\n", A22);
+    fmt.Printf(">>>>>XXX: Strassen: A22: \n%v\n", A22.elements);
     //fmt.Printf(">>>>>XXX: Strassen: B11: \n%v\n", B11);
     //fmt.Printf(">>>>>XXX: Strassen: B22: \n%v\n", B22);
 
 	Z := A11.PlusSparseQuiet(A22)
 	Z1 := B11.PlusSparseQuiet(B22)
-    //fmt.Printf(">>>>>ZZZ: Strassen: Z: \n%v\n", Z)
-    //fmt.Printf(">>>>>ZZZ: Strassen: Z1: \n%v\n", Z1)
+    fmt.Printf(">>>>>ZZZ: Strassen: Z: \n%v\n", Z)
+    fmt.Printf(">>>>>ZZZ: Strassen: Z1: \n%v\n", Z1)
 
 	M1 := MulStrassen(Z, Z1)
     fmt.Printf("AFTER>>>>>000: Strassen: M1: \n%v\n", M1)
