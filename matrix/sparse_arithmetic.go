@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 package matrix
-import "fmt"
+//import "fmt"
 
 /*
 The sum of this matrix and another.
@@ -78,17 +78,15 @@ func (A *SparseMatrix) Add(B MatrixRO) error {
 Add another matrix to this one in place, optimized for sparsity.
 */
 func (A *SparseMatrix) AddSparse(B *SparseMatrix) error {
-	fmt.Printf("INPUT A:%v \nB:%v\n",A,B)
 	if A.rows != B.Rows() || A.cols != B.Cols() {
 		return ErrorDimensionMismatch
 	}
 
 	for index, value := range B.elements {
-		i, j := A.GetRowColIndex(index)
-		fmt.Printf("SETTING %v,%v to %v+%v\n",i,j,A.Get(i,j),value)
+		i, j := B.GetRowColIndex(index)
+        //fmt.Printf("GET from B index: %v results in A: i:%v,j:%v A.Get:%v\n",index,i,j, A.Get(i,j))
 		A.Set(i, j, A.Get(i, j)+value)
 	}
-	fmt.Printf("RETURNING %v\n",A)
 
 	return nil
 }
@@ -123,7 +121,9 @@ func (A *SparseMatrix) SubtractSparse(B *SparseMatrix) error {
 	}
 
 	for index, value := range B.elements {
-		i, j := A.GetRowColIndex(index)
+        // this seems incorrect.  rey 9/14/2012
+		//i, j := A.GetRowColIndex(index)
+		i, j := B.GetRowColIndex(index)
 		A.Set(i, j, A.Get(i, j)-value)
 	}
 

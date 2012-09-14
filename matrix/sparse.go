@@ -5,6 +5,7 @@
 package matrix
 
 import "math/rand"
+import "fmt"
 
 /*
 A sparse matrix based on go's map datastructure.
@@ -63,6 +64,7 @@ func (A *SparseMatrix) GetColIndex(index int) (j int) {
 Turn an element index into a row and column number.
 */
 func (A *SparseMatrix) GetRowColIndex(index int) (i int, j int) {
+    //fmt.Printf("index: %v offset: %v step: %v i: %v\n",index,A.offset,A.step, (index-A.offset)/A.step)
 	i = (index - A.offset) / A.step
 	j = (index - A.offset) % A.step
 	return
@@ -128,6 +130,7 @@ func (A *SparseMatrix) GetMatrix(i, j, rows, cols int) (subMatrix *SparseMatrix)
 	subMatrix.rows = rows
 	subMatrix.cols = cols
 	subMatrix.offset = (i+A.offset/A.step)*A.step + (j + A.offset%A.step)
+    //fmt.Printf("Setting offset in submatrix i:%v j:%v to %v\n",i,j,subMatrix.offset)
 	subMatrix.step = A.step
 	subMatrix.elements = A.elements
 	for index, _ := range subMatrix.elements {
@@ -229,12 +232,23 @@ func (A *SparseMatrix) U() *SparseMatrix {
 }
 
 func (A *SparseMatrix) Copy() *SparseMatrix {
-	B := ZerosSparse(A.rows, A.cols)
+	//B := ZerosSparse(A.rows, A.cols)
+	B := ZerosSparseTrueCopy(A.rows, A.cols, A.offset, A.step)
 	for index, value := range A.elements {
 		B.elements[index] = value
 	}
 	return B
 }
+func ZerosSparseTrueCopy(rows int, cols int, offset int, step int) *SparseMatrix {
+	A := new(SparseMatrix)
+	A.rows = rows
+	A.cols = cols
+	A.offset = offset
+	A.step = step
+	A.elements = map[int]float64{}
+	return A
+}
+
 
 func ZerosSparse(rows int, cols int) *SparseMatrix {
 	A := new(SparseMatrix)
@@ -284,4 +298,4 @@ func (A *SparseMatrix) SparseMatrix() *SparseMatrix {
 	return A.Copy()
 }
 
-func (A *SparseMatrix) String() string { return String(A) }
+func (A *SparseMatrix) String() string { return fmt.Sprintf("elements: %v step: %v offset: [%v] REST: %v",A.elements,A.step,A.offset,String(A)) }
