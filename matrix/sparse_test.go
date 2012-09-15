@@ -5,10 +5,15 @@
 package matrix
 
 import (
+	//"os"
+	//"log"
+	//"flag"
 	"fmt"
 	"math/rand"
 	"testing"
+    //"runtime/pprof"
 )
+//import pprof "net/http/pprof"
 
 func TestMulSimple(t *testing.T) {
 	n := 8
@@ -25,10 +30,56 @@ func TestMulSimple(t *testing.T) {
 		E.Set(0, i, 4)
 		E.Set(i, i, 4)
 	}
+    /*
+	var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
+	var memprofile = flag.String("memprofile", "", "write memory profile to this file")
+	flag.Parse()
+	//Setup  profiling
+	if *cpuprofile != "" {
+		f, err := os.Create(*cpuprofile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
 
+	if *memprofile != "" {
+		f, err := os.Create(*memprofile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.WriteHeapProfile(f)
+		f.Close()
+		//return
+	}
+    */
 	D := MulSimple(A, B)
 	if !Equals(D, E) {
 		t.Fail()
+	}
+}
+
+func BenchmarkMulSimple(b *testing.B) {
+	n := 8
+	A := ZerosSparse(n, n)
+	B := ZerosSparse(n, n)
+	for i := 0; i < n; i++ {
+		A.Set(0, i, 2)
+		A.Set(i, i, 2)
+		B.Set(i, i, 2)
+	}
+
+	E := ZerosSparse(n, n)
+	for i := 0; i < n; i++ {
+		E.Set(0, i, 4)
+		E.Set(i, i, 4)
+	}
+    b.StartTimer()
+	D := MulSimple(A, B)
+    b.StopTimer()
+	if !Equals(D, E) {
+		b.Fail()
 	}
 }
 
@@ -48,53 +99,53 @@ func TestMulStrassenBigger2(t *testing.T) {
 		E.Set(i, i, 4)
 	}
 
-    ////fmt.Printf("strassen bigger: A: %v\n", A)
-    ////fmt.Printf("strassen bigger: B: %v\n", B)
+	////fmt.Printf("strassen bigger: A: %v\n", A)
+	////fmt.Printf("strassen bigger: B: %v\n", B)
 	D := MulStrassen(A, B)
-    //fmt.Printf("strassen bigger: %v\n", D)
+	//fmt.Printf("strassen bigger: %v\n", D)
 	if !Equals(D, E) {
 		t.Fail()
 	}
 }
 
 func TestGetMatrix_Sparse2(t *testing.T) {
-    n := 2
+	n := 2
 	A := Zeros(n, n).SparseMatrix()
 	for i := 0; i < n; i++ {
-        A.Set(i,i,2)
-    }
+		A.Set(i, i, 2)
+	}
 	B := A.GetMatrix(1, 1, 1, 1)
 	//B := A.GetMatrix(0, 0, 1, 1)
 	C := Zeros(1, 1).SparseMatrix()
 	for i := 0; i < 1; i++ {
-        C.Set(i,i,2)
-    }
+		C.Set(i, i, 2)
+	}
 	if !Equals(B, C) {
 		t.Fail()
 	}
 }
 
 func TestPlusSparse2(t *testing.T) {
-    n := 4
+	n := 4
 	A := Zeros(n, n).SparseMatrix()
 	for i := 0; i < n; i++ {
-        A.Set(i,i,2)
-    }
-    A = A.GetMatrix(2,2,2,2)
+		A.Set(i, i, 2)
+	}
+	A = A.GetMatrix(2, 2, 2, 2)
 	B := Zeros(n, n).SparseMatrix()
 	for i := 0; i < n; i++ {
-        B.Set(i,i,2)
-    }
-    B = B.GetMatrix(0,0,2,2)
-    n = 2
+		B.Set(i, i, 2)
+	}
+	B = B.GetMatrix(0, 0, 2, 2)
+	n = 2
 	C := Zeros(n, n).SparseMatrix()
 	for i := 0; i < n; i++ {
-        C.Set(i,i,4)
-    }
-    ////fmt.Printf("A: %v\n",A)
-    ////fmt.Printf("B: %v\n",B)
+		C.Set(i, i, 4)
+	}
+	////fmt.Printf("A: %v\n",A)
+	////fmt.Printf("B: %v\n",B)
 	C2 := A.PlusSparseQuiet(B)
-    ////fmt.Printf("C2: %v\n",C2)
+	////fmt.Printf("C2: %v\n",C2)
 
 	if !Equals(C2, C) {
 		t.Fail()
@@ -102,51 +153,51 @@ func TestPlusSparse2(t *testing.T) {
 }
 
 func TestPlusSparse(t *testing.T) {
-    n := 2
+	n := 2
 	A := Zeros(n, n).SparseMatrix()
 	for i := 0; i < n; i++ {
-        A.Set(i,i,2)
-    }
+		A.Set(i, i, 2)
+	}
 	B := Zeros(n, n).SparseMatrix()
 	for i := 0; i < n; i++ {
-        B.Set(i,i,2)
-    }
+		B.Set(i, i, 2)
+	}
 	C := Zeros(n, n).SparseMatrix()
 	for i := 0; i < n; i++ {
-        C.Set(i,i,4)
-    }
+		C.Set(i, i, 4)
+	}
 	C2, _ := A.PlusSparse(B)
 	if !Equals(C2, C) {
 		t.Fail()
 	}
 }
 func TestAddSparse(t *testing.T) {
-    n := 2
+	n := 2
 	A := Zeros(n, n).SparseMatrix()
 	for i := 0; i < n; i++ {
-        A.Set(i,i,2)
-    }
+		A.Set(i, i, 2)
+	}
 	B := Zeros(n, n).SparseMatrix()
 	for i := 0; i < n; i++ {
-        B.Set(i,i,2)
-    }
+		B.Set(i, i, 2)
+	}
 	A.AddSparse(B)
 }
 
 func TestElementMult_Sparse2(t *testing.T) {
-    n := 8
+	n := 8
 	A := Zeros(n, n).SparseMatrix()
 	for i := 0; i < n; i++ {
-        A.Set(i,i,2)
-    }
+		A.Set(i, i, 2)
+	}
 	B := Zeros(n, n).SparseMatrix()
 	for i := 0; i < n; i++ {
-        B.Set(i,i,2)
-    }
+		B.Set(i, i, 2)
+	}
 	C1, _ := A.ElementMult(B)
 	C2, _ := A.ElementMultSparse(B)
 	D, _ := A.DenseMatrix().ElementMult(B)
-    ////fmt.Printf("simple: %v\n", C2)
+	////fmt.Printf("simple: %v\n", C2)
 	if !Equals(D, C1) {
 		t.Fail()
 	}
@@ -181,9 +232,8 @@ func TestMulNaive(t *testing.T) {
 }
 */
 
-
 func TestMulStrassenOnly(t *testing.T) {
-    // force out of memory
+	// force out of memory
 	//n := 2000
 	//n := 8000
 	//n := 2 
@@ -193,23 +243,23 @@ func TestMulStrassenOnly(t *testing.T) {
 	//n := 200
 	//n := 16
 	n := 8
-    ////fmt.Printf("init1\n")
-/*
-	A := ZerosSparse(n, n)
-	for i := 0; i < 36; i++ {
-		x := rand.Intn(6)
-		y := rand.Intn(6)
-		A.Set(y, x, 1)
-	}
-    ////fmt.Printf("init2\n")
-	B := ZerosSparse(n, n)
-	for i := 0; i < 36; i++ {
-		x := rand.Intn(6)
-		y := rand.Intn(6)
-		B.Set(y, x, 1)
-	}
-*/
-/**/
+	////fmt.Printf("init1\n")
+	/*
+		A := ZerosSparse(n, n)
+		for i := 0; i < 36; i++ {
+			x := rand.Intn(6)
+			y := rand.Intn(6)
+			A.Set(y, x, 1)
+		}
+	    ////fmt.Printf("init2\n")
+		B := ZerosSparse(n, n)
+		for i := 0; i < 36; i++ {
+			x := rand.Intn(6)
+			y := rand.Intn(6)
+			B.Set(y, x, 1)
+		}
+	*/
+	/**/
 	A := ZerosSparse(n, n)
 	B := ZerosSparse(n, n)
 	for i := 0; i < n; i++ {
@@ -224,25 +274,25 @@ func TestMulStrassenOnly(t *testing.T) {
 		A1.Set(i, i, 2)
 		B1.Set(i, i, 2)
 	}
-/**/
+	/**/
 
-/*
-	E := ZerosSparse(n, n)
-	for i := 0; i < n; i++ {
-		E.Set(i, i, 4)
-	}
-*/
-    //fmt.Printf("A: %v\n", A)
-    //fmt.Printf("B: %v\n", B)
+	/*
+		E := ZerosSparse(n, n)
+		for i := 0; i < n; i++ {
+			E.Set(i, i, 4)
+		}
+	*/
+	//fmt.Printf("A: %v\n", A)
+	//fmt.Printf("B: %v\n", B)
 
 	D := MulStrassen(A, B)
 	//E, _ := A.ElementMultSparse(B)
-    //E, _ := A.DenseMatrix().ElementMult(B)
-    // element mult is not matrix multiplication!!!
-    //E, _ := A1.ElementMult(B1)
+	//E, _ := A.DenseMatrix().ElementMult(B)
+	// element mult is not matrix multiplication!!!
+	//E, _ := A1.ElementMult(B1)
 	E := MulStrassen(A, B)
-    ////fmt.Printf("D: %v\n", D)
-    ////fmt.Printf("E: %v\n", E)
+	////fmt.Printf("D: %v\n", D)
+	////fmt.Printf("E: %v\n", E)
 	if !Equals(D, E) {
 		t.Fail()
 	}
@@ -262,10 +312,10 @@ func TestMulStrassenBigger(t *testing.T) {
 		E.Set(i, i, 4)
 	}
 
-    ////fmt.Printf("strassen bigger: A: %v\n", A)
-    ////fmt.Printf("strassen bigger: B: %v\n", B)
+	////fmt.Printf("strassen bigger: A: %v\n", A)
+	////fmt.Printf("strassen bigger: B: %v\n", B)
 	D := MulStrassen(A, B)
-    //fmt.Printf("strassen bigger: %v\n", D)
+	//fmt.Printf("strassen bigger: %v\n", D)
 	if !Equals(D, E) {
 		t.Fail()
 	}
