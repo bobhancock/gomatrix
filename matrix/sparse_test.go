@@ -10,6 +10,28 @@ import (
 	"testing"
 )
 
+func TestMulSimple(t *testing.T) {
+	n := 8
+	A := ZerosSparse(n, n)
+	B := ZerosSparse(n, n)
+	for i := 0; i < n; i++ {
+		A.Set(0, i, 2)
+		A.Set(i, i, 2)
+		B.Set(i, i, 2)
+	}
+
+	E := ZerosSparse(n, n)
+	for i := 0; i < n; i++ {
+		E.Set(0, i, 4)
+		E.Set(i, i, 4)
+	}
+
+	D := MulSimple(A, B)
+	if !Equals(D, E) {
+		t.Fail()
+	}
+}
+
 func TestMulStrassenBigger2(t *testing.T) {
 	n := 8
 	A := ZerosSparse(n, n)
