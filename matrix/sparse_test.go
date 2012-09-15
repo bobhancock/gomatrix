@@ -15,6 +15,34 @@ import (
 )
 //import pprof "net/http/pprof"
 
+func TestMulStrassenRandom(t *testing.T) {
+	n := 4 
+		A := ZerosSparse(n, n)
+		for i := 0; i < 36; i++ {
+			x := rand.Intn(6)
+			y := rand.Intn(6)
+			v := rand.Float64()
+			A.Set(y, x, v)
+		}
+		B := ZerosSparse(n, n)
+		for i := 0; i < 36; i++ {
+			x := rand.Intn(6)
+			y := rand.Intn(6)
+			v := rand.Float64()
+			B.Set(y, x, v)
+		}
+
+	D := MulStrassen(A, B)
+	E := MulSimple(A, B)
+	//if !Equals(D, E) {
+	if !ApproxEquals(D, E, ε) {
+        fmt.Printf("D: \n", D)
+        fmt.Printf("E: \n", E)
+		t.Fail()
+	}
+}
+
+
 func TestMulSimple(t *testing.T) {
 	n := 8
 	A := ZerosSparse(n, n)
