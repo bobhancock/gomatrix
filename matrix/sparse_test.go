@@ -16,7 +16,7 @@ import (
 //import pprof "net/http/pprof"
 
 func TestMulStrassenRandom(t *testing.T) {
-	n := 4 
+	n :=  16
 		A := ZerosSparse(n, n)
 		for i := 0; i < 36; i++ {
 			x := rand.Intn(6)
