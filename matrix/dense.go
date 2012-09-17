@@ -69,11 +69,11 @@ func (A *DenseMatrix) Sqrm() {
 // Returns the rows that match.
 func (A *DenseMatrix) FiltCol(min, max float64, col int) (*DenseMatrix, error) {
 	rows, cols := A.GetSize()
-	buf := make([]float64, cols)
+	buf := make([]float64, 0)
 	
 	if col < 0 || col > cols - 1 {
 		matches := Zeros(1,1)
-		return matches, errors.New(fmt.Sprintf("matutil: Expected col vaule in range 0 to %d.  Received %d\n", cols -1, col))
+		return matches, errors.New(fmt.Sprintf("FiltCol: Expected col vaule in range 0 to %d.  Received %d\n", cols -1, col))
 	}
 
 	num_matches := 0
@@ -81,16 +81,8 @@ func (A *DenseMatrix) FiltCol(min, max float64, col int) (*DenseMatrix, error) {
 		v := A.Get(i, col)
 
 		if v >= min && v <= max {
-			if num_matches == 0 {
-				for j := 0; j < cols; j++ {
-					buf[j] = A.Get(i, j)
-				}
-                //fmt.Printf("QQQ: FIRST MATCH copy row:\n %v\n", buf);
-			} else {
-				for k := 0; k < cols; k++ {
-					buf = append(buf,  A.Get(i, k))
-				}
-                //fmt.Printf("QQQ: SUBSEQUENT MATCH append row:\n %v\n", buf);
+			for k := 0; k < cols; k++ {
+				buf = append(buf,  A.Get(i, k))
 			}
 			num_matches++
 		}
@@ -101,7 +93,6 @@ func (A *DenseMatrix) FiltCol(min, max float64, col int) (*DenseMatrix, error) {
     if num_matches == 0 {
         err = errors.New("matutil: no match")
     }
-	//return matches, nil
 	return matches, err
  }
 
