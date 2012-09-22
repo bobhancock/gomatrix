@@ -148,6 +148,44 @@ func (A *DenseMatrix) AppendCol(column []float64) (*DenseMatrix, error) {
 	return MakeDenseMatrix(source, rows, cols+1), err
 }
 
+// AppendRow appends a row to the bottom of a matrix.
+func (A *DenseMatrix) AppendRow(r *DenseMatrix) (*DenseMatrix, error) {
+	rows := A.rows
+	cols := A.cols
+	rrows := r.rows
+	rcols := r.cols
+	if cols != rcols {
+		return Zeros(1,1), errors.New(fmt.Sprintf("Expect %d by %d matrix.  Received %d by %d matrix.\n", rows,cols, rrows, rcols))
+	}
+
+	source := append(A.Array(), r.Array()...)
+	return MakeDenseMatrix(source, rows+1, cols), nil
+}
+
+// RowExists returns true if the row vector exists in the matrix.
+func (A *DenseMatrix) RowExists(r *DenseMatrix) bool {
+	rows := A.rows
+	cols := A.cols
+	//rrows := r.rows
+	rcols := r.cols
+	if cols != rcols {
+		return false
+	}
+	
+	for i := 0; i < rows; i++ {
+		rowexists := true
+		for j := 0; j < cols; j++ {
+			if r.Get(0, j) != A.Get(i, j) {
+				rowexists = false
+				break
+			}
+		}
+		if rowexists {
+			return true
+		}
+	}
+	return false
+}
 
 // ColSlice retrieves the values in column i of a matrix as a slice
 func (A DenseMatrix) ColSlice(col int) []float64 {
