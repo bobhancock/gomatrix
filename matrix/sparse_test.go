@@ -16,7 +16,16 @@ import (
 //import pprof "net/http/pprof"
 
 func TestMulStrassenRandom(t *testing.T) {
-	n :=  16
+	//n :=  2048
+	//n :=  128
+	n :=  8
+
+    //
+    // ok   github.com/bobhancock/gomatrix-ralph-strassens/gomatrix/matrix  363.304s
+	//n :=  256
+
+    // *** Test killed: ran too long.
+	//n :=  512
 		A := ZerosSparse(n, n)
 		for i := 0; i < 36; i++ {
 			x := rand.Intn(6)
@@ -32,8 +41,15 @@ func TestMulStrassenRandom(t *testing.T) {
 			B.Set(y, x, v)
 		}
 
+    // 2 MulStrassen's on chromebook at n=256
+    // ok   github.com/bobhancock/gomatrix-ralph-strassens/gomatrix/matrix  259.999s
+
+    // 2 MulSimple's on chromebook at n=256
+    // ok   github.com/bobhancock/gomatrix-ralph-strassens/gomatrix/matrix  473.440s
+	//D := MulSimple(A, B)
 	D := MulStrassen(A, B)
 	E := MulSimple(A, B)
+	//E := MulStrassen(A, B)
 	//if !Equals(D, E) {
 	if !ApproxEquals(D, E, ε) {
         fmt.Printf("D: \n", D)
