@@ -69,11 +69,11 @@ func (A *DenseMatrix) Sqrm() {
 // Returns the rows that match.
 func (A *DenseMatrix) FiltCol(min, max float64, col int) (*DenseMatrix, error) {
 	rows, cols := A.GetSize()
-	buf := make([]float64, cols)
+	buf := make([]float64, 0)
 	
 	if col < 0 || col > cols - 1 {
 		matches := Zeros(1,1)
-		return matches, errors.New(fmt.Sprintf("matutil: Expected col vaule in range 0 to %d.  Received %d\n", cols -1, col))
+		return matches, errors.New(fmt.Sprintf("FiltCol: Expected col vaule in range 0 to %d.  Received %d\n", cols -1, col))
 	}
 
 	num_matches := 0
@@ -81,16 +81,8 @@ func (A *DenseMatrix) FiltCol(min, max float64, col int) (*DenseMatrix, error) {
 		v := A.Get(i, col)
 
 		if v >= min && v <= max {
-			if num_matches == 0 {
-				for j := 0; j < cols; j++ {
-					buf[j] = A.Get(i, j)
-				}
-                //fmt.Printf("QQQ: FIRST MATCH copy row:\n %v\n", buf);
-			} else {
-				for k := 0; k < cols; k++ {
-					buf = append(buf,  A.Get(i, k))
-				}
-                //fmt.Printf("QQQ: SUBSEQUENT MATCH append row:\n %v\n", buf);
+			for k := 0; k < cols; k++ {
+				buf = append(buf,  A.Get(i, k))
 			}
 			num_matches++
 		}
@@ -101,7 +93,6 @@ func (A *DenseMatrix) FiltCol(min, max float64, col int) (*DenseMatrix, error) {
     if num_matches == 0 {
         err = errors.New("matutil: no match")
     }
-	//return matches, nil
 	return matches, err
  }
 
@@ -157,6 +148,44 @@ func (A *DenseMatrix) AppendCol(column []float64) (*DenseMatrix, error) {
 	return MakeDenseMatrix(source, rows, cols+1), err
 }
 
+// AppendRow appends a row to the bottom of a matrix.
+func (A *DenseMatrix) AppendRow(r *DenseMatrix) (*DenseMatrix, error) {
+	rows := A.rows
+	cols := A.cols
+	rrows := r.rows
+	rcols := r.cols
+	if cols != rcols {
+		return Zeros(1,1), errors.New(fmt.Sprintf("Expect %d by %d matrix.  Received %d by %d matrix.\n", rows,cols, rrows, rcols))
+	}
+
+	source := append(A.Array(), r.Array()...)
+	return MakeDenseMatrix(source, rows+1, cols), nil
+}
+
+// RowExists returns true if the row vector exists in the matrix.
+func (A *DenseMatrix) RowExists(r *DenseMatrix) bool {
+	rows := A.rows
+	cols := A.cols
+	//rrows := r.rows
+	rcols := r.cols
+	if cols != rcols {
+		return false
+	}
+	
+	for i := 0; i < rows; i++ {
+		rowexists := true
+		for j := 0; j < cols; j++ {
+			if r.Get(0, j) != A.Get(i, j) {
+				rowexists = false
+				break
+			}
+		}
+		if rowexists {
+			return true
+		}
+	}
+	return false
+}
 
 // ColSlice retrieves the values in column i of a matrix as a slice
 func (A DenseMatrix) ColSlice(col int) []float64 {
